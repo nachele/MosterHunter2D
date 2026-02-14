@@ -36,6 +36,6 @@ C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\refint\MonoGame
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\MonoGame.pdb
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\MonoGame.genruntimeconfig.cache
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\ref\MonoGame.dll
+C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\Background.png
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\c.png
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\h.png
-C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\Background.png

@@ -12,7 +12,7 @@ namespace MonoGame
         private  static int fps = 120;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private MainCharacter entity;
+        private MainCharacter Player;
         private Task animation;        
         public static int FPS
         {
@@ -32,24 +32,24 @@ namespace MonoGame
         protected override void Initialize() //inicializacion de objetos propiedades.
         {
             
-            entity = new MainCharacter(100,100); //Creando Objeto MainCharacter.
-            animation = Task.Run(entity.Animation);
+            Player = new MainCharacter(Content, "PersonajeCaminaRecto",100,100,new Vector2(100,100),2); //Creando Objeto MainCharacter.
+            animation = Task.Run(Player.Animation);
             string file = Map.FileTo1DArray("map.txt");
             Map.StringTo2DArray(file);
+            Map.MapEntitines(Content);
             //Map.EntitysTexture2DLoad();
             base.Initialize(); //utilizando Initialize de Game.
-            Entity ntity = new Entity();
-            ntity.Position = new Vector2(100, 100);
+            
 
         }
         
         protected override void LoadContent()//Cargando el contenido.
         {
-           // TODO: use this.Content to load your game content here
+           
             Menu.Load(Content, "PlayButton"); //cargando la imagen del menu
+
             _spriteBatch = new SpriteBatch(GraphicsDevice); //cargando el spritebatch
-            entity.Load(Content,"PersonajeCaminaRecto",2); //cargando textura tamaño de imagen y el recorte.
-            Map.TextureLoad(Content, "Cabaña.png");//cargando las texturas del mapa.         
+
         }
 
         protected override void Update(GameTime gameTime)//bulce principal.
@@ -57,7 +57,8 @@ namespace MonoGame
             KeyBoardDetection.keys(_graphics); //objeto para detectar las teclas pulsadas.
             Menu.Update(); //update del menu.
             if (!Menu.active) {
-                entity.Movement(); //movimiento del personaje principal.
+                Map.Movement();
+                Player.Movement(); //movimiento del personaje principal.
             };
             base.Update(gameTime);
         }
@@ -68,8 +69,8 @@ namespace MonoGame
             
             _spriteBatch.Begin();
             if (!Menu.active) {
-                Map.Draw(_spriteBatch);
-                entity.Draw(_spriteBatch); } //dibuajando entidades.
+                Map.DrawUpdate(_spriteBatch);
+                Player.Draw(_spriteBatch); } //dibuajando entidades.
             if (Menu.active) { Menu.Draw(_spriteBatch); } //dibujando el meno.
             _spriteBatch.End();
             base.Draw(gameTime);

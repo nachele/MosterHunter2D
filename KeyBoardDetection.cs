@@ -21,6 +21,7 @@ namespace MonoGame
         public static bool W
         {
             get { return w; }
+            set { w = value; }
         }  
         public static bool A
         {
