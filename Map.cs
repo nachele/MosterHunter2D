@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace MonoGame
@@ -45,6 +46,10 @@ namespace MonoGame
         private static int bottomRenderY;
 
         public static int LeftRenderX { get; private set; }
+
+        private static int bottomInit;
+        private static int mapInitposx;
+        private static int mapInitposY;
 
         #endregion
 
@@ -124,49 +129,57 @@ namespace MonoGame
             //haciendo que el render mueva con el jugador.
             if (!init)
             {
-                renderWidth = 3;
+                renderWidth = 7; //tamaño del renderer.
                 PlayerPosY = (Math.Abs(((int)Player.Posy) / 100)); // me da el indice de arriba.
                 PlayerPosX = (Math.Abs(((int)Player.Posx) / 100)); // me da el indice de la derecha. 
                 topRenderY = PlayerPosY - renderWidth;
                 RightRenderX = PlayerPosX + renderWidth;
                 bottomRenderY = PlayerPosY + renderWidth;
                 LeftRenderX = PlayerPosX - renderWidth;
+                bottomInit = 0;
+                mapInitposx = (int)Math.Abs((EntitysTexture2D[0, 0].Posx - OfsetXstart)) / 100;
                 init = true;
             }
-             
 
-            if (KeyBoardDetection.W)
+           
+            if( (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 >= 0 && (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 < (row - 2))
             {
-                if (topRenderY - (int)Player.Speed >= 0 && bottomRenderY - (int)Player.Speed >= 0  && topRenderY - (int)Player.Speed < row)
-                {
-                    topRenderY -= (int)Player.Speed;
-                    bottomRenderY -= (int)Player.Speed; 
-                }
+                mapInitposY = (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100;                
+            }
+            
+            if(bottomRenderY + mapInitposY < row)
+            {
+                bottomInit = bottomRenderY + mapInitposY;
+                
+            }
+            if((bottomInit - (renderWidth * 2))>= 0)
+            {
+                topRenderY = bottomInit - (renderWidth * 2);
+            }
+            else if(topRenderY < 0)
+            {
+                topRenderY = 0;
             }
 
+                Debug.WriteLine(bottomInit);
             //lo que renderizo el juego.
-            for (int i = topRenderY ; i < bottomRenderY; i++)
+            for (int i = topRenderY ; i < bottomInit; i++)
             {
                 for (int x = LeftRenderX ; x < RightRenderX; x++)
                 {
-
-
+                    if (map2d[i,x] == "h")
                         _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart +(int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
-
-
                 }
             }
-            for (int i = (PlayerPosY + renderWidth); i > (PlayerPosY); i--)
+            for (int i = topRenderY ; i < bottomInit; i++)
             {
-                for (int x = (PlayerPosX - renderWidth); x < (PlayerPosX); x++)
+                for (int x = LeftRenderX ; x < RightRenderX; x++)
                 {
                     if (map2d[i,x] == "c")
-                    {
-                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx), ((int)EntitysTexture2D[i, x].Posy), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
-
-                    }
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart +(int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
                 }
             }
+       
         }
 
         public static void Movement()
@@ -175,7 +188,7 @@ namespace MonoGame
             {
                 for (int x = 0; x < col - 2; x++)
                 {
-                    if (KeyBoardDetection.W) { EntitysTexture2D[i, x].Posy += 3; }
+                    if (KeyBoardDetection.W) { EntitysTexture2D[i, x].Posy += 3;  }
                     if (KeyBoardDetection.S) { EntitysTexture2D[i, x].Posy -= 3; }
                     if (KeyBoardDetection.D) { EntitysTexture2D[i,x].Posx -= 3; }
                     if (KeyBoardDetection.A) { EntitysTexture2D[i, x].Posx += 3; }
