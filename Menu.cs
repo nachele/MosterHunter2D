@@ -30,7 +30,7 @@ namespace MonoGame
             {
                 _spriteBatch.Draw(texture, new Rectangle((int)playButton.X, (int)playButton.Y, (int)size.X, (int)size.Y), Microsoft.Xna.Framework.Color.White); // Pintar imagen
             }
-        }//Draw();
+        }//Renderer();
         static public void Update()
         {
 

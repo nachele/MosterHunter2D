@@ -53,7 +53,7 @@ namespace MonoGame
         public void Draw(SpriteBatch _spriteBatch) //dibuja la imagen recortada por el sprite que quiero.
         {
             _spriteBatch.Draw(Texture, new Rectangle((int)this.posX, (int)this.posY, (int)size.X, (int)size.Y), Color.White); // Pintar imagen
-        }//Draw();
+        }//Renderer();
         #endregion
 
     }

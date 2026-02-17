@@ -1,14 +1,15 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
-using System.IO;
-using System.Diagnostics;
 
 
 namespace MonoGame
@@ -43,13 +44,13 @@ namespace MonoGame
 
         public static int RightRenderX { get; private set; }
 
-        private static int bottomRenderY;
+        private static int bottomRenderYInit;
 
         public static int LeftRenderX { get; private set; }
 
-        private static int bottomInit;
+        private static int bottomRenderY;
         private static int mapInitposx;
-        private static int mapInitposY;
+        private static int deltaRenderY;
 
         #endregion
 
@@ -116,72 +117,63 @@ namespace MonoGame
                     else if (map2d[i,x] == "c")
                     {
                         EntitysTexture2D[i, x] = new Entity(content, map2d[i, x] + ".png", (OfsetXstart - 300 + x * 100), (OfsetYstart  - 300 + i * 100), new Vector2(600, 600), 1);
-                    }
-                        
-                    
-                    
+                    }                   
                 }
             }
         }//MapEntities();
 
-        public static void DrawUpdate(SpriteBatch _spriteBatch, MainCharacter Player) //Dibuja los entities.
+        public static void Renderer(MainCharacter Player) //Dibuja los entities.
         {
-            //haciendo que el render mueva con el jugador.
-            if (!init)
+            if (!init) //inicializando variables.
             {
                 renderWidth = 7; //tamaño del renderer.
                 PlayerPosY = (Math.Abs(((int)Player.Posy) / 100)); // me da el indice de arriba.
                 PlayerPosX = (Math.Abs(((int)Player.Posx) / 100)); // me da el indice de la derecha. 
-                topRenderY = PlayerPosY - renderWidth;
-                RightRenderX = PlayerPosX + renderWidth;
-                bottomRenderY = PlayerPosY + renderWidth;
-                LeftRenderX = PlayerPosX - renderWidth;
-                bottomInit = 0;
-                mapInitposx = (int)Math.Abs((EntitysTexture2D[0, 0].Posx - OfsetXstart)) / 100;
+                topRenderY = PlayerPosY - renderWidth; //alto del render.
+                RightRenderX = PlayerPosX + renderWidth;//ancho derecha render
+                bottomRenderYInit = PlayerPosY + renderWidth;//parte de abajo del render inicial.
+                LeftRenderX = PlayerPosX - renderWidth;//ancho izquierda del render.
+                bottomRenderY = 0; //parte de abajo del render.
                 init = true;
             }
-
-           
-            if( (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 >= 0 && (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 < (row - 2))
+            if( (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 >= 0 && (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100 < (row - 1))
             {
-                mapInitposY = (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100;                
+                deltaRenderY = (int)Math.Abs((EntitysTexture2D[0, 0].Posy - OfsetYstart)) / 100; // lo que se le suma en y al renderer para que vaya renderizando nuevo mapa.
             }
             
-            if(bottomRenderY + mapInitposY < row)
+            if(bottomRenderYInit + deltaRenderY < row)
             {
-                bottomInit = bottomRenderY + mapInitposY;
-                
+                bottomRenderY = bottomRenderYInit + deltaRenderY; //nos da la posicion del render parte de abajo. (indice).
             }
-            if((bottomInit - (renderWidth * 2))>= 0)
+            if((bottomRenderY - (renderWidth * 2))>= 0)
             {
-                topRenderY = bottomInit - (renderWidth * 2);
+                topRenderY = bottomRenderY - (renderWidth * 2); //nos da la posicion del render parte de arriba.(indice).
             }
-            else if(topRenderY < 0)
+            else if(topRenderY < 0) //si el render y es menor que la fila de arriba que no se vuelva negativo, porque es un indice
             {
                 topRenderY = 0;
             }
-
-                Debug.WriteLine(bottomInit);
-            //lo que renderizo el juego.
-            for (int i = topRenderY ; i < bottomInit; i++)
-            {
-                for (int x = LeftRenderX ; x < RightRenderX; x++)
-                {
-                    if (map2d[i,x] == "h")
-                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart +(int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
-                }
-            }
-            for (int i = topRenderY ; i < bottomInit; i++)
-            {
-                for (int x = LeftRenderX ; x < RightRenderX; x++)
-                {
-                    if (map2d[i,x] == "c")
-                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart +(int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
-                }
-            }
-       
         }
-
+        public static void Draw(SpriteBatch _spriteBatch, MainCharacter Player) 
+        {
+            //lo que renderizo el juego.
+            for (int i = topRenderY; i < bottomRenderY; i++)
+            {
+                for (int x = LeftRenderX; x < RightRenderX; x++)
+                {
+                    if (map2d[i, x] == "h")
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart + (int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                }
+            } //dibujando la hierba.
+            for (int i = topRenderY; i < bottomRenderY; i++)
+            {
+                for (int x = LeftRenderX; x < RightRenderX; x++)
+                {
+                    if (map2d[i, x] == "c")
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle(((int)EntitysTexture2D[i, x].Posx - OfsetXstart + (int)Player.SIZE.X / 2), ((int)EntitysTexture2D[i, x].Posy - OfsetYstart + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                }
+            } //dibujando las casas.
+        }
         public static void Movement()
         {
             for (int i = 0; i < row; ++i)

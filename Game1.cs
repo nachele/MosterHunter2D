@@ -70,12 +70,13 @@ namespace MonoGame
             
             _spriteBatch.Begin();
             if (!Menu.active) {
-                Map.DrawUpdate(_spriteBatch,Player);
+                Map.Renderer(Player);
+                Map.Draw(_spriteBatch, Player);
                 Player.Draw(_spriteBatch); } //dibuajando entidades.
             if (Menu.active) { Menu.Draw(_spriteBatch); } //dibujando el meno.
             _spriteBatch.End();
             base.Draw(gameTime);
-        }//Draw();
+        }//Renderer();
         #endregion
     }
 }
