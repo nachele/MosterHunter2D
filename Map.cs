@@ -32,8 +32,8 @@ namespace MonoGame
         private static int TextureHeight; //alto texturas
         private static Vector2 size; //vector renderWidth alto texturas.
         private static List<(int, int)> HousesIndex = new List<(int, int)>();
-        private static int OfsetXstart = 800;
-        private static int OfsetYstart  = 500;
+        private static int OfsetXstart = -200;
+        private static int OfsetYstart = -200;
         private static bool init;
         private static int renderWidth;
 
@@ -159,7 +159,20 @@ namespace MonoGame
             }
         }
         
-        public static void Draw(SpriteBatch _spriteBatch, MainCharacter Player) //Draw 
+        public static void RenderUpdate(MainCharacter Player, SpriteBatch _spriteBatch)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+                    if (EntitysTexture2D[i,x].Posy > Player.Posy - 500 && EntitysTexture2D[i,x].Posy < Player.Posy + 500)
+                    {
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx + OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy + OfsetYstart) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                    }
+                }
+            }
+        }
+        public static void DrawRendered(SpriteBatch _spriteBatch, MainCharacter Player) //DrawRendered 
         {
             //lo que renderizo el juego.
             for (int i = topRenderY; i < bottomRenderY; i++)
@@ -167,7 +180,7 @@ namespace MonoGame
                 for (int x = LeftRenderX; x < RightRenderX; x++)
                 {
                     if (map2d[i, x] == "h")
-                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx - OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy - OfsetYstart ) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx + OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy + OfsetYstart ) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
                 }
             } //dibujando la hierba.
             for (int i = topRenderY; i < bottomRenderY; i++)
@@ -175,11 +188,31 @@ namespace MonoGame
                 for (int x = LeftRenderX; x < RightRenderX; x++)
                 {
                     if (map2d[i, x] == "c")
-                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx - OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy - OfsetYstart ) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx + OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy + OfsetYstart ) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
                 }
             } //dibujando las casas.
         }
-       
+        public static void DrawAll(SpriteBatch _spriteBatch, MainCharacter Player)//Dibujar todos los entities.
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+                    if (map2d[i, x] == "h")
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx + OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy + OfsetYstart) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                }
+            } //dibujando la hierba.
+            for (int i = 0; i < row; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+                    if (map2d[i, x] == "c")
+                        _spriteBatch.Draw(EntitysTexture2D[i, x].TEXTURE, new Rectangle((((int)EntitysTexture2D[i, x].Posx + OfsetXstart) + (int)Player.SIZE.X / 2), (((int)EntitysTexture2D[i, x].Posy + OfsetYstart) + (int)Player.SIZE.Y), ((int)(EntitysTexture2D[i, x].SIZE.X)), (int)(EntitysTexture2D[i, x].SIZE.Y)), Color.White); // Pintar imagen
+                }
+            }  //dibujando las casas.
+        }
+
+        
         public static void Movement()
         {
             for (int i = 0; i < row; ++i)

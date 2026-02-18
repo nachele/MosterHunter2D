@@ -73,10 +73,11 @@ namespace MonoGame
             GraphicsDevice.Clear(Color.Green); // Fondo
             
             _spriteBatch.Begin();
-            _spriteBatch.Draw(fondo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            //_spriteBatch.DrawRendered(fondo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             if (!Menu.active) {
-                Map.Renderer(Player);
-                Map.Draw(_spriteBatch, Player);
+                //Map.Renderer(Player);
+                //Map.DrawRendered(_spriteBatch, Player);
+               Map.RenderUpdate(Player,_spriteBatch);
                 Player.Draw(_spriteBatch); } //dibuajando entidades.
             if (Menu.active) { Menu.Draw(_spriteBatch); } //dibujando el meno.
             _spriteBatch.End();
