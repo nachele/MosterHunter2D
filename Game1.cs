@@ -77,7 +77,7 @@ namespace MonoGame
             if (!Menu.active) {
                 //Map.Renderer(Player);
                 //Map.DrawRendered(_spriteBatch, Player);
-               Map.RenderUpdate(Player,_spriteBatch);
+                Map.RenderUpdate(Player,_spriteBatch);
                 Player.Draw(_spriteBatch); } //dibuajando entidades.
             if (Menu.active) { Menu.Draw(_spriteBatch); } //dibujando el meno.
             _spriteBatch.End();
