@@ -78,7 +78,8 @@ namespace MonoGame
             _spriteBatch.Begin();
             if (!Menu.active) {
                 Map.Draw(Player, _spriteBatch, 1200, 1200);
-                Player.Draw(_spriteBatch); } //dibuajando entidades.
+                //Player.Draw(_spriteBatch);
+                } //dibuajando entidades.
             Rectangle rect = new Rectangle
                 (
                     (int)Player.Posx,

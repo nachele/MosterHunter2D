@@ -80,7 +80,7 @@ namespace MonoGame
             int indexY = 0;
             foreach(string s in map)
             {
-                if(s != "h" && s != "c" && s != "a" && s != "w")
+                if(s != "h" && s != "c" && s != "a" && s != "w" && s != "b")
                 {
                     ++indexY;
                     
@@ -121,23 +121,32 @@ namespace MonoGame
                     {
                         EntitysTexture2D[i, x] = new Entity(content, map2d[i, x] + ".png", (OfsetXstart + x * 100), (OfsetYstart + i * 100), new Vector2(100, 100), 1);
                     }
+                    else if (map2d[i, x] == "b")
+                    {
+                        EntitysTexture2D[i, x] = new Entity(content, map2d[i, x] + ".png", (OfsetXstart + x * 100), (OfsetYstart + i * 100), new Vector2(300, 300), 1);
+                    }
                 }
             }
         }//MapEntities();
+
         public static void Draw(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
         {
             for (int i = 0; i < row - 1; i++)
             {
                 for (int x = 0; x < col - 2; x++)
                 {
+                    _spriteBatch.Draw(
+                            EntitysTexture2D[0, 0].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[0, 0].Posx + OfsetXstart + x * 100),
+                                ((int)EntitysTexture2D[0, 0].Posy + OfsetYstart + i * 100),
+                                (int)EntitysTexture2D[0, 0].SIZE.X,
+                                (int)EntitysTexture2D[0, 0].SIZE.Y
+                            ),
+                            Color.White
+                        );
 
-                    if (
-                        EntitysTexture2D[i, x].Posy > Player.Posy - heigth &&
-                        EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth &&
-
-                        EntitysTexture2D[i, x].Posx > Player.Posx - width &&
-                        EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width
-                       )
+                    if (EntitysTexture2D[i, x].Posy > Player.Posy - heigth && EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth &&EntitysTexture2D[i, x].Posx > Player.Posx - width &&EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width)
                     {
                         if (map2d[i, x] == "h" || map2d[i, x] == "a" || map2d[i,x] == "w")
                         {
@@ -154,11 +163,6 @@ namespace MonoGame
                         }
 
                     }
-
-
-
-
-
                 }
             }
             for (int i = 0; i < row - 1; i++)
@@ -188,6 +192,38 @@ namespace MonoGame
                         );
                         }
                             
+                    }
+                }
+            }
+
+            Player.Draw(_spriteBatch);
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+
+                    if (
+                        EntitysTexture2D[i, x].Posy > Player.Posy - heigth &&
+                        EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth &&
+
+                        EntitysTexture2D[i, x].Posx > Player.Posx - width &&
+                        EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width
+                       )
+                    {
+                        if (map2d[i, x] == "b")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
                     }
                 }
             }
