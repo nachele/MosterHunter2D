@@ -39,3 +39,6 @@ C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\ref\MonoGame.dl
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\Background.png
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\c.png
 C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\h.png
+C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\a.png
+C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\obj\Debug\net8.0\MonoGame.sourcelink.json
+C:\Users\estudio\Desktop\MAUI\MonoGame\MonoGame\bin\Debug\net8.0\Content\w.png

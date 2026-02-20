@@ -75,14 +75,9 @@ namespace MonoGame
         {
 
             GraphicsDevice.Clear(Color.Green); // Fondo
-            
             _spriteBatch.Begin();
-            //_spriteBatch.DrawRendered(fondo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             if (!Menu.active) {
-                //Map.Renderer(Player);
-                //Map.DrawRendered(_spriteBatch, Player);
-                //Map.RenderUpdate(Player,_spriteBatch,300,300);
-                Map.RenderV3(Player, _spriteBatch, 1200, 1200);
+                Map.Draw(Player, _spriteBatch, 1200, 1200);
                 Player.Draw(_spriteBatch); } //dibuajando entidades.
             Rectangle rect = new Rectangle
                 (
