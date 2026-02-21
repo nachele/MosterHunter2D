@@ -1,15 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+
 
 
 namespace MonoGame
@@ -24,31 +18,22 @@ namespace MonoGame
         #region propiedades
         private static string[] map;//array de una dimension con los caracteres.
         private static string[,]map2d;//array de dos dimensiones con los caracteres.
-        private static Entity[,] mapEntities;
         private static Entity[,] EntitysTexture2D;
         private static int row; //filas de los arrays 2d
         private static int col; //columnas de los arrays 2d
-        private static int TextureWidth; //renderWidth texturas
-        private static int TextureHeight; //alto texturas
-        private static Vector2 size; //vector renderWidth alto texturas.
-        private static List<(int, int)> HousesIndex = new List<(int, int)>();
+        private static Vector2 size = new Vector2(1200,1200); //vector renderWidth alto texturas.
         private static int OfsetXstart = -200;
         private static int OfsetYstart = -200;
-        private static bool init;
-        private static int renderWidth;
+        public static Vector2 Size
+        {
+            get { return size; }    
+        }
         public static int OfsetXIndex { get; private set; }
         public static int OfsetIndex { get; private set; }
         public static int PlayerPosY { get; private set; }
         public static int PlayerPosX { get; private set; }
-        private static int topRenderY;
         public static int RightRenderX { get; private set; }
-        private static int bottomRenderYInit;
         public static int LeftRenderX { get; private set; }
-
-        private static int bottomRenderY;
-        private static int mapInitposx;
-        private static int deltaRenderY;
-
         #endregion
 
         #region metodos
@@ -128,7 +113,173 @@ namespace MonoGame
                 }
             }
         }//MapEntities();
+        public static void DrawBackground(MainCharacter Player, SpriteBatch _spriteBatch)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+                    _spriteBatch.Draw(
+                            EntitysTexture2D[0, 0].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[0, 0].Posx + OfsetXstart + x * 100),
+                                ((int)EntitysTexture2D[0, 0].Posy + OfsetYstart + i * 100),
+                                (int)EntitysTexture2D[0, 0].SIZE.X,
+                                (int)EntitysTexture2D[0, 0].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                }
+            }
+         } //dibuja el fondo de hierba.
+        public static void DrawGrassSprites(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
 
+                    if (EntitysTexture2D[i, x].Posy > Player.Posy - heigth && EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth && EntitysTexture2D[i, x].Posx > Player.Posx - width && EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width)
+                    {
+                        if (map2d[i, x] == "h")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
+                    }
+                }
+            }
+        }//dibuja sprites de hierba.
+        public static void DrawArenaSprites(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+
+                    if (EntitysTexture2D[i, x].Posy > Player.Posy - heigth && EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth && EntitysTexture2D[i, x].Posx > Player.Posx - width && EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width)
+                    {
+                        if (map2d[i, x] == "a")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
+                    }
+                }
+            }
+        }// dibuja sprites de Arena.
+        public static void DrawWaterSprites(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+
+                    if (EntitysTexture2D[i, x].Posy > Player.Posy - heigth && EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth && EntitysTexture2D[i, x].Posx > Player.Posx - width && EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width)
+                    {
+                        if (map2d[i, x] == "w")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
+                    }
+                }
+            }
+        }//dibuja sprites de Agua.
+        public static void DrawBushSprites(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+
+                    if (
+                        EntitysTexture2D[i, x].Posy > Player.Posy - heigth &&
+                        EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth &&
+
+                        EntitysTexture2D[i, x].Posx > Player.Posx - width &&
+                        EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width
+                       )
+                    {
+                        if (map2d[i, x] == "b")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
+                    }
+                }
+            }
+        }//dibuja sprites de arbustos.
+        public static void DrawHouseSprites(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
+        {
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int x = 0; x < col - 2; x++)
+                {
+
+                    if (
+                        EntitysTexture2D[i, x].Posy > Player.Posy - heigth &&
+                        EntitysTexture2D[i, x].Posy < Player.Posy + (int)Player.SIZE.Y + heigth &&
+
+                        EntitysTexture2D[i, x].Posx > Player.Posx - width &&
+                        EntitysTexture2D[i, x].Posx < Player.Posx + (int)Player.SIZE.X + width
+                       )
+                    {
+                        if (map2d[i, x] == "c")
+                        {
+                            _spriteBatch.Draw(
+                            EntitysTexture2D[i, x].TEXTURE,
+                            new Rectangle(
+                                ((int)EntitysTexture2D[i, x].Posx + OfsetXstart),
+                                ((int)EntitysTexture2D[i, x].Posy + OfsetYstart),
+                                (int)EntitysTexture2D[i, x].SIZE.X,
+                                (int)EntitysTexture2D[i, x].SIZE.Y
+                            ),
+                            Color.White
+                        );
+                        }
+
+                    }
+                }
+            }
+
+        }//dibuja sprites de Casas.
         public static void Draw(MainCharacter Player, SpriteBatch _spriteBatch, int width, int heigth)
         {
             for (int i = 0; i < row - 1; i++)
@@ -227,7 +378,7 @@ namespace MonoGame
                     }
                 }
             }
-        }
+        }//dibuaj todos los sprites.
         public static void Movement()
         {
             for (int i = 0; i < row; ++i)

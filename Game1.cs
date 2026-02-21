@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+
 using System.Threading.Tasks;
 
 
@@ -16,6 +16,7 @@ namespace MonoGame
         private Task animation;
         private Texture2D fondo;
         private Texture2D pixel;
+        
 
         public static int FPS
         {
@@ -77,9 +78,21 @@ namespace MonoGame
             GraphicsDevice.Clear(Color.Green); // Fondo
             _spriteBatch.Begin();
             if (!Menu.active) {
-                Map.Draw(Player, _spriteBatch, 1200, 1200);
-                //Player.Draw(_spriteBatch);
-                } //dibuajando entidades.
+                
+                Map.DrawBackground(Player, _spriteBatch);
+
+                Map.DrawArenaSprites(Player, _spriteBatch, (int)Map.Size.X, (int)Map.Size.X);
+
+                Map.DrawWaterSprites(Player, _spriteBatch, (int)Map.Size.X, (int)Map.Size.Y);
+
+                Map.DrawHouseSprites(Player, _spriteBatch, (int)Map.Size.X, (int)Map.Size.Y);
+
+                Player.Draw(_spriteBatch);
+
+                Map.DrawBushSprites(Player, _spriteBatch, (int)Map.Size.X, (int)Map.Size.Y);
+                } 
+
+            //rectangulo rojo alrededor de player START.
             Rectangle rect = new Rectangle
                 (
                     (int)Player.Posx,
@@ -101,7 +114,7 @@ namespace MonoGame
                 // Línea derecha
                 _spriteBatch.Draw(pixel, new Rectangle(rect.X + rect.Width, rect.Y, grosor, rect.Height), Color.Red);
             }
-            
+            //rectangulo rojo alrededor de player END.
 
             if (Menu.active) { Menu.Draw(_spriteBatch); } //dibujando el meno.
             _spriteBatch.End();
